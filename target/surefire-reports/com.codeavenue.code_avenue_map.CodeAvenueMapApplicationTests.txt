@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.codeavenue.code_avenue_map.CodeAvenueMapApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.756 s - in com.codeavenue.code_avenue_map.CodeAvenueMapApplicationTests

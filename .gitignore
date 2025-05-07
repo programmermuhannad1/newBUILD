@@ -1,0 +1,43 @@
+# السماح برفع target/ و build/ و HELP.md
+
+!build/
+!HELP.md
+
+# السماح برفع ملفات IntelliJ IDEA و VS Code
+!.idea/
+!.vscode/
+
+# السماح برفع ملفات .mvn/wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# منع ملفات الكومبايل المؤقتة
+*.class
+*.log
+*.swp
+.DS_Store
+
+### STS (Spring Tool Suite) ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+# منع ملفات الإعدادات المؤقتة فقط
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+# لا تمنع ملفات VS Code إذا كنت تريد رفعها
+!.vscode/
