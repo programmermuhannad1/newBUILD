@@ -1,16 +1,16 @@
 package com.codeavenue.code_avenue_map.config;
 
-import jakarta.servlet.http.HttpServletResponse;
+// import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+// import org.springframework.security.authentication.AuthenticationManager;
+// import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.security.config.http.SessionCreationPolicy;
+// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+// import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -18,13 +18,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
+// @EnableWebSecurity // قم بتعليق هذا لتجنب تمكين Spring Security تلقائيًا
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+    // قم بتعليق أو إزالة حقن JwtAuthenticationFilter
+    // private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    // public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    //     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    // }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,30 +33,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        // السماح مؤقتًا بطلبات OPTIONS على جميع المسارات لحل مشكلة CORS المحتملة
-                        .requestMatchers(request -> request.getRequestURI().startsWith("/") && request.getMethod().equals("OPTIONS")).permitAll()
-                        .requestMatchers("/**").permitAll() // **تعديل مؤقت: السماح لجميع المسارات. يجب تعديل هذا لاحقًا!**
-                        .requestMatchers("/api/users/me").authenticated()
-                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/**").permitAll() // السماح بجميع الطلبات
+                        .anyRequest().permitAll()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(
-                        (request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json");
-                            response.setCharacterEncoding("UTF-8");
-                            response.getWriter().write("{\"error\": \"Unauthorized access. Please provide a valid token.\"}");
-                            response.getWriter().flush();
-                        }));
+                .sessionManagement(session -> session.disable()) // تعطيل إدارة الجلسات
+                // قم بتعليق أو إزالة إضافة عامل التصفية JWT
+                // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception.disable()); // تعطيل معالجة الاستثناءات الأمنية
+
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // السماح لجميع النطاقات بالوصول
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Authorization"));
@@ -66,13 +58,14 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+    // قم بتعليق أو إزالة Beans AuthenticationManager و PasswordEncoder إذا لم تعد تستخدمهما
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    //     return new BCryptPasswordEncoder(12);
+    // }
+    //
+    // @Bean
+    // public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    //     return authConfig.getAuthenticationManager();
+    // }
 }
