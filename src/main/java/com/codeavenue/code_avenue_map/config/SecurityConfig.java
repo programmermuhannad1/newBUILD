@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // السماح لجميع النطاقات مؤقتًا. **يجب تعديل هذا في بيئة الإنتاج!**
+        configuration.setAllowedOrigins(List.of("https://www.codeavenuemap.com")); // السماح لجميع النطاقات مؤقتًا. **يجب تعديل هذا في بيئة الإنتاج!**
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Authorization"));
