@@ -15,8 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -24,8 +23,6 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        // حتى لو كنت لا تريد حماية، قد تحتاج إلى هذا الفلتر إذا كان جزءًا آخر من نظامك يعتمد عليه.
-        // إذا لم يكن كذلك، يمكنك إزالته.
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
@@ -35,10 +32,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // السماح بالوصول إلى أي طلب بدون قيود
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/admin-login").permitAll()
+                        .requestMatchers("/api/news").permitAll()
+                        .requestMatchers("/api/users/me").authenticated()
+                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // قم بإزالة هذا السطر إذا كنت لا تريد أي نوع من التحقق من الصحة للرمز المميز JWT
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(
                         (request, response, authException) -> {
@@ -54,16 +55,21 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("*")); // السماح بجميع المصادر
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // السماح بجميع طرق HTTP
-        configuration.setAllowedHeaders(Collections.singletonList("*")); // السماح بجميع الرؤوس
-        configuration.setExposedHeaders(Collections.singletonList("*")); // السماح بعرض جميع الرؤوس
-        configuration.setAllowCredentials(false); // لا تسمح ببيانات الاعتماد (الكوكيز، رؤوس التخويل) إذا كنت تسمح بجميع المصادر
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://test-liart-seven-41.vercel.app",
+                "https://newprojectfront.vercel.app"  // 👈 أضف هذا الرابط
+        ));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
