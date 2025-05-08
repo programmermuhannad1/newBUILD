@@ -32,10 +32,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // ✅ المسارات العامة مثل /login
+                        .requestMatchers("/**").permitAll() // اسمح لجميع المسارات مؤقتًا (منها OPTIONS)
                         .requestMatchers("/api/users/me").authenticated()
                         .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-                        .anyRequest().permitAll() // ✅ اسمح مؤقتًا لجميع المسارات الأخرى (ومنها OPTIONS)
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -56,8 +56,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://test-liart-seven-41.vercel.app",
-                "https://newprojectfront.vercel.app",
-                "https://newprojectfront-arpe2aoxs-oplkn99-gmailcoms-projects.vercel.app"  // ✅ رابط Vercel الجديد
+                "https://newprojectfront.vercel.app" // ✅ تم تحديث الرابط هنا
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
