@@ -32,7 +32,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll() // اسمح لجميع المسارات مؤقتًا (منها OPTIONS)
+                        // السماح مؤقتًا بطلبات OPTIONS على جميع المسارات لحل مشكلة CORS المحتملة
+                        .requestMatchers(request -> request.getRequestURI().startsWith("/") && request.getMethod().equals("OPTIONS")).permitAll()
+                        .requestMatchers("/**").permitAll() // **تعديل مؤقت: السماح لجميع المسارات. يجب تعديل هذا لاحقًا!**
                         .requestMatchers("/api/users/me").authenticated()
                         .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
