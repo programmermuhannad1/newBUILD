@@ -58,7 +58,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://test-liart-seven-41.vercel.app",
-                "https://newprojectfront-arpe2aoxs-oplkn99-gmailcoms-projects.vercel.app"  // 👈 أضف هذا الرابط
+                "https://newprojectfront.vercel.app",
+                "https://newprojectfront-arpe2aoxs-oplkn99-gmailcoms-projects.vercel.app"  // ✅ هذا هو رابطك الحالي
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
@@ -69,6 +70,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
 
     @Bean
