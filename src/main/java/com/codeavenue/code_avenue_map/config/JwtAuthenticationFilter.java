@@ -36,6 +36,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         logger.info("🔍 معالجة الطلب: {}", requestURI);
 
+        // السماح بطلبات OPTIONS على /api/auth/login بدون التحقق من التوكن
+        if (requestURI.startsWith("/api/auth/login") && request.getMethod().equals("OPTIONS")) {
+            logger.info("✅ تم السماح بطلب OPTIONS على /api/auth/login بدون مصادقة.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // تخطي التحقق من التوكن لمسارات تسجيل الدخول والتسجيل والأخبار وتسجيل دخول المسؤول
         if (requestURI.startsWith("/api/auth/login") ||
                 requestURI.startsWith("/api/auth/register") ||
                 requestURI.startsWith("/api/news") ||
