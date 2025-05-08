@@ -58,7 +58,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://test-liart-seven-41.vercel.app",
-                "https://newprojectfront.vercel.app"  // 👈 أضف هذا الرابط
+                "https://newprojectfront-arpe2aoxs-oplkn99-gmailcoms-projects.vercel.app"  // 👈 أضف هذا الرابط
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
