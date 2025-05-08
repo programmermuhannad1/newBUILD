@@ -32,13 +32,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
-                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/admin-login").permitAll()
-                        .requestMatchers("/api/news").permitAll()
+                        .requestMatchers("/**").permitAll() // اسمح لجميع المسارات مؤقتًا (منها OPTIONS)
                         .requestMatchers("/api/users/me").authenticated()
                         .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
+
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(
