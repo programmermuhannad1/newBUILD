@@ -53,11 +53,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "https://test-liart-seven-41.vercel.app",
-                "https://newprojectfront.vercel.app" // ✅ تم تحديث الرابط هنا
-        ));
+        configuration.setAllowedOrigins(List.of("*")); // السماح لجميع النطاقات بالوصول
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Authorization"));
