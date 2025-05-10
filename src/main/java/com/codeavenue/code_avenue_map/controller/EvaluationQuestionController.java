@@ -43,6 +43,7 @@ public class EvaluationQuestionController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "احصل على جميع أسئلة التقييم")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "تم استرجاع الأسئلة بنجاح",
@@ -57,6 +58,7 @@ public class EvaluationQuestionController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "احصل على سؤال التقييم عن ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "تم استرجاع السؤال بنجاح",
@@ -92,7 +94,7 @@ public class EvaluationQuestionController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Delete evaluation question (admin only)")
+    @Operation(summary = "حذف سؤال التقييم (للمسؤول فقط)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "تم حذف السؤال بنجاح"),
             @ApiResponse(responseCode = "403", description = "رفض الوصول"),
