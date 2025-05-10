@@ -26,7 +26,6 @@ public class FeedbackController {
         this.feedbackService = feedbackService;
     }
 
-
     @PostMapping
     @Operation(summary = "إضافة تقييم جديد", description = "يتمكن المستخدم المسجل فقط من إضافة تقييم جديد.")
     @ApiResponses({
@@ -50,14 +49,12 @@ public class FeedbackController {
                 .orElseThrow(() -> new FeedbackNotFoundException(id)));
     }
 
-
     @GetMapping
     @Operation(summary = "جلب جميع التقييمات", description = "إرجاع قائمة بجميع التقييمات المسجلة.")
     @ApiResponse(responseCode = "200", description = "تم استرجاع قائمة التقييمات بنجاح")
     public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks() {
         return ResponseEntity.ok(feedbackService.getAllFeedbacks());
     }
-
 
     @GetMapping("/user")
     @Operation(summary = "جلب تقييمات المستخدم", description = "يتمكن المستخدم من استعراض تقييماته فقط.")
@@ -71,7 +68,6 @@ public class FeedbackController {
         return ResponseEntity.ok(feedbackService.getFeedbacksByUser(userId));
     }
 
-
     @PutMapping("/{id}")
     @Operation(summary = "تحديث تقييم", description = "يمكن للمستخدم تحديث تقييمه الخاص فقط.")
     @ApiResponses({
@@ -84,7 +80,6 @@ public class FeedbackController {
     public ResponseEntity<FeedbackDTO> updateFeedback(@PathVariable Long id, @RequestBody FeedbackRequestDTO updatedFeedbackDTO) {
         return ResponseEntity.ok(feedbackService.updateFeedback(id, updatedFeedbackDTO));
     }
-
 
     @DeleteMapping("/{id}")
     @Operation(summary = "حذف تقييم", description = "يمكن للمستخدم حذف تقييمه الخاص، ويمكن للمسؤول حذف أي تقييم.")
