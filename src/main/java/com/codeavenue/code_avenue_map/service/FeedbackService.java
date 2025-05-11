@@ -6,9 +6,10 @@ import com.codeavenue.code_avenue_map.model.Feedback;
 import com.codeavenue.code_avenue_map.model.User;
 import com.codeavenue.code_avenue_map.model.dto.FeedbackDTO;
 import com.codeavenue.code_avenue_map.model.dto.FeedbackRequestDTO;
+import com.codeavenue.code_avenue_map.model.dto.UserDTO;
+import com.codeavenue.code_avenue_map.repository.EvaluationQuestionRepository;
 import com.codeavenue.code_avenue_map.repository.FeedbackRepository;
 import com.codeavenue.code_avenue_map.repository.UserRepository;
-import com.codeavenue.code_avenue_map.repository.EvaluationQuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,9 +31,9 @@ public class FeedbackService {
     private FeedbackDTO mapToDTO(Feedback feedback) {
         return new FeedbackDTO(
                 feedback.getId(),
-                feedback.getUser().getId(),
                 feedback.getQuestion().getId(),
-                feedback.getFeedbackChoice()
+                feedback.getFeedbackChoice(),  // تأكد أنه من النوع الصحيح
+                new UserDTO(feedback.getUser().getId()) // تأكد من تهيئة الـ UserDTO بشكل صحيح
         );
     }
 
