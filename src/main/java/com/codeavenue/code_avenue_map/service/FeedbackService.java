@@ -29,13 +29,30 @@ public class FeedbackService {
     }
 
     private FeedbackDTO mapToDTO(Feedback feedback) {
+        User user = feedback.getUser();
+        UserDTO userDTO = new UserDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getCountry(),
+                user.getCity(),
+                user.getRole(),
+                user.getGender(),
+                user.getEducationLevel(),
+                user.getUniversityCollege(),
+                user.getBirthDate(),
+                user.getPhoneNumber()
+        );
+
         return new FeedbackDTO(
                 feedback.getId(),
                 feedback.getQuestion().getId(),
-                feedback.getFeedbackChoice(),  // تأكد أنه من النوع الصحيح
-                new UserDTO(feedback.getUser().getId()) // تأكد من تهيئة الـ UserDTO بشكل صحيح
+                feedback.getFeedbackChoice(),
+                userDTO
         );
     }
+
 
     public FeedbackDTO createFeedback(FeedbackRequestDTO feedbackRequestDTO) {
         User user = userRepository.findById(feedbackRequestDTO.getUserId())
