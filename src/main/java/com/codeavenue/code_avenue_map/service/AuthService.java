@@ -35,7 +35,7 @@ public class AuthService {
 
     public LoginResponse adminLogin(LoginRequest request, HttpServletResponse response) {
         try {
-            logger.info("🔍 محاولة تسجيل دخول الإدمن للبريد الإلكتروني: {}", request.getEmail());
+            logger.info("🔍 محاولة تسجيل دخول للبريد الإلكتروني: {}", request.getEmail());
 
             User user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new InvalidCredentialsException("❌ البريد الإلكتروني أو كلمة المرور غير صحيحة."));
@@ -44,22 +44,23 @@ public class AuthService {
                 throw new InvalidCredentialsException("❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.");
             }
 
-            if (user.getRole() != Role.ADMIN && user.getRole() != Role.SUPER_ADMIN) {
-                throw new InvalidCredentialsException("🚫 غير مصرح لك بالوصول إلى هذا الحساب.");
+            if (user.getStatus() != User.Status.ACTIVE) {
+                throw new InvalidCredentialsException("🚫 الحساب غير مفعل.");
             }
 
             String token = jwtUtil.generateToken(new CustomUserDetails(user));
-
             response.setHeader("Authorization", "Bearer " + token);
 
-            logger.info("✅ تسجيل دخول ناجح للمسؤول: {} - دور: {}", user.getEmail(), user.getRole());
+            logger.info("✅ تسجيل دخول ناجح: {} - الدور: {}", user.getEmail(), user.getRole());
 
             return new LoginResponse(token, user.getId().toString());
+
         } catch (Exception e) {
             logger.error("❌ فشل تسجيل الدخول: {}", e.getMessage());
             throw e;
         }
     }
+
 
     public LoginResponse login(LoginRequest request) {
         try {
