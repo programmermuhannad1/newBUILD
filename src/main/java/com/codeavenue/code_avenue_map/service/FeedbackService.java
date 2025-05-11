@@ -6,10 +6,9 @@ import com.codeavenue.code_avenue_map.model.Feedback;
 import com.codeavenue.code_avenue_map.model.User;
 import com.codeavenue.code_avenue_map.model.dto.FeedbackDTO;
 import com.codeavenue.code_avenue_map.model.dto.FeedbackRequestDTO;
-import com.codeavenue.code_avenue_map.model.dto.UserDTO;
-import com.codeavenue.code_avenue_map.repository.EvaluationQuestionRepository;
 import com.codeavenue.code_avenue_map.repository.FeedbackRepository;
 import com.codeavenue.code_avenue_map.repository.UserRepository;
+import com.codeavenue.code_avenue_map.repository.EvaluationQuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,30 +28,13 @@ public class FeedbackService {
     }
 
     private FeedbackDTO mapToDTO(Feedback feedback) {
-        User user = feedback.getUser();
-        UserDTO userDTO = new UserDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getCountry(),
-                user.getCity(),
-                user.getRole(),
-                user.getGender(),
-                user.getEducationLevel(),
-                user.getUniversityCollege(),
-                user.getBirthDate(),
-                user.getPhoneNumber()
-        );
-
         return new FeedbackDTO(
                 feedback.getId(),
+                feedback.getUser().getId(),
                 feedback.getQuestion().getId(),
-                feedback.getFeedbackChoice(),
-                userDTO
+                feedback.getFeedbackChoice()
         );
     }
-
 
     public FeedbackDTO createFeedback(FeedbackRequestDTO feedbackRequestDTO) {
         User user = userRepository.findById(feedbackRequestDTO.getUserId())
